@@ -38,19 +38,17 @@ canvas{
 width:100%;
 border-radius:25px;
 margin-top:15px;
+cursor:pointer;
 }
 
-/* UPLOAD */
+/* INSTRUCTION */
 
-.upload{
-margin-top:20px;
-padding:20px;
-border-radius:20px;
-background:#e9e9e9;
+.instruction{
 
-box-shadow:
-8px 8px 16px #cfcfcf,
--8px -8px 16px #ffffff;
+margin-top:10px;
+font-size:14px;
+opacity:0.7;
+
 }
 
 /* BUTTON ROW */
@@ -139,11 +137,9 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 <img src="logo.png" class="logo">
 </div><div class="container"><canvas id="canvas" width="800" height="800"></canvas>
 
-<div class="upload">Upload your photo
-
-<br><br>
-
-<input type="file" id="upload"></div><div class="row"><button class="btn" onclick="undo()">Undo</button>
+<div class="instruction">
+Tap image to upload • Drag to move • Pinch to zoom
+</div><div class="row"><button class="btn" onclick="undo()">Undo</button>
 
 <button class="btn" onclick="redo()">Redo</button>
 
@@ -151,11 +147,13 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 
 <button class="btn bigbtn" onclick="download()">Download Photo</button>
 
+<button class="btn bigbtn" onclick="shareFB()">Share to Facebook</button>
+
 <div class="fb">Follow Alhera Football Fest on Facebook
 
 <br><a href="https://www.facebook.com/share/1E2pWE5mAb/" target="_blank">Follow Page
 
-</a></div></div><script>
+</a></div></div><input type="file" id="upload" style="display:none"><script>
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
@@ -184,7 +182,15 @@ draw();
 
 }
 
-/* UPLOAD PHOTO */
+/* CLICK CANVAS TO UPLOAD */
+
+canvas.addEventListener("click",function(){
+
+document.getElementById("upload").click();
+
+});
+
+/* UPLOAD */
 
 document.getElementById("upload").addEventListener("change",function(e){
 
@@ -197,9 +203,7 @@ img=new Image();
 img.onload=function(){
 
 scale=1;
-
 posX=0;
-
 posY=0;
 
 saveState();
@@ -225,7 +229,6 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 if(img.src){
 
 let w=canvas.width*scale;
-
 let h=canvas.height*scale;
 
 ctx.drawImage(img,posX,posY,w,h);
@@ -233,6 +236,20 @@ ctx.drawImage(img,posX,posY,w,h);
 }
 
 ctx.drawImage(frame,0,0,canvas.width,canvas.height);
+
+/* TEXT OVERLAY */
+
+if(!img.src){
+
+ctx.fillStyle="rgba(0,0,0,0.6)";
+ctx.fillRect(0,350,800,100);
+
+ctx.fillStyle="white";
+ctx.font="bold 36px sans-serif";
+ctx.textAlign="center";
+ctx.fillText("Tap Here To Upload Photo",400,410);
+
+}
 
 }
 
@@ -245,7 +262,6 @@ if(e.touches.length==1){
 dragging=true;
 
 startX=e.touches[0].clientX-posX;
-
 startY=e.touches[0].clientY-posY;
 
 }
@@ -267,7 +283,6 @@ e.preventDefault();
 if(e.touches.length==1 && dragging){
 
 posX=e.touches[0].clientX-startX;
-
 posY=e.touches[0].clientY-startY;
 
 draw();
@@ -303,7 +318,6 @@ saveState();
 function getDistance(t1,t2){
 
 let dx=t1.clientX-t2.clientX;
-
 let dy=t1.clientY-t2.clientY;
 
 return Math.sqrt(dx*dx+dy*dy);
@@ -315,7 +329,6 @@ return Math.sqrt(dx*dx+dy*dy);
 function saveState(){
 
 history.push({scale,posX,posY});
-
 redoStack=[];
 
 }
@@ -331,9 +344,7 @@ redoStack.push(history.pop());
 let last=history[history.length-1];
 
 scale=last.scale;
-
 posX=last.posX;
-
 posY=last.posY;
 
 draw();
@@ -351,9 +362,7 @@ if(redoStack.length>0){
 let state=redoStack.pop();
 
 scale=state.scale;
-
 posX=state.posX;
-
 posY=state.posY;
 
 history.push(state);
@@ -369,9 +378,7 @@ draw();
 function centerImage(){
 
 scale=1;
-
 posX=0;
-
 posY=0;
 
 draw();
@@ -389,6 +396,14 @@ link.download="alhera-football-fest.png";
 link.href=canvas.toDataURL();
 
 link.click();
+
+}
+
+/* SHARE */
+
+function shareFB(){
+
+window.open("https://www.facebook.com/sharer/sharer.php?u="+window.location.href);
 
 }
 
