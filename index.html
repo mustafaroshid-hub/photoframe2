@@ -40,54 +40,54 @@ font-size:16px;
 <button onclick="download()">Download</button>
 
 <script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-
-let userImage = new Image();
-let frame = new Image();
-
+const frame = new Image();
 frame.src = "20260312_005001.png";
 
-document.getElementById("upload").addEventListener("change", function(e){
+const upload = document.getElementById("upload");
 
-let file = e.target.files[0];
-let reader = new FileReader();
+upload.addEventListener("change", function(e) {
 
-reader.onload = function(event){
+  const file = e.target.files[0];
+  const reader = new FileReader();
 
-userImage.onload = function(){
-draw();
-}
+  reader.onload = function(event) {
 
-userImage.src = event.target.result;
+    const userImage = new Image();
 
-}
+    userImage.onload = function() {
 
-reader.readAsDataURL(file);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      ctx.drawImage(userImage,0,0,canvas.width,canvas.height);
+
+      frame.onload = function(){
+        ctx.drawImage(frame,0,0,canvas.width,canvas.height);
+      }
+
+      if(frame.complete){
+        ctx.drawImage(frame,0,0,canvas.width,canvas.height);
+      }
+
+    }
+
+    userImage.src = event.target.result;
+
+  }
+
+  reader.readAsDataURL(file);
 
 });
 
-function draw(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.drawImage(userImage,0,0,canvas.width,canvas.height);
-
-ctx.drawImage(frame,0,0,canvas.width,canvas.height);
-
-}
-
 function download(){
-
-let link = document.createElement("a");
-link.download = "framed-photo.png";
-link.href = canvas.toDataURL();
-link.click();
-
+  const link = document.createElement("a");
+  link.download = "photo.png";
+  link.href = canvas.toDataURL();
+  link.click();
 }
-
 </script>
-
 </body>
 </html>
+
