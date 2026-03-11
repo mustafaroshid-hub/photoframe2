@@ -32,13 +32,65 @@ margin:auto;
 padding:20px;
 }
 
+/* FRAME AREA */
+
+.frame-area{
+position:relative;
+}
+
 /* CANVAS */
 
 canvas{
 width:100%;
 border-radius:25px;
 margin-top:15px;
+}
+
+/* UPLOAD BUTTON ON IMAGE */
+
+.upload-btn{
+
+position:absolute;
+
+top:50%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+background:#111;
+
+color:white;
+
+padding:16px 26px;
+
+border-radius:40px;
+
+font-size:16px;
+
 cursor:pointer;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.35);
+
+animation:pulse 2s infinite;
+
+}
+
+/* PULSE ANIMATION */
+
+@keyframes pulse{
+
+0%{
+transform:translate(-50%,-50%) scale(1);
+}
+
+50%{
+transform:translate(-50%,-50%) scale(1.08);
+}
+
+100%{
+transform:translate(-50%,-50%) scale(1);
+}
+
 }
 
 /* INSTRUCTION */
@@ -135,10 +187,12 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 
 </style></head><body><div class="header">
 <img src="logo.png" class="logo">
-</div><div class="container"><canvas id="canvas" width="800" height="800"></canvas>
+</div><div class="container"><div class="frame-area"><canvas id="canvas" width="800" height="800"></canvas>
 
-<div class="instruction">
-Tap image to upload • Drag to move • Pinch to zoom
+<div class="upload-btn" id="uploadBtn">
+⬆ Upload your image
+</div></div><div class="instruction">
+Drag to move • Pinch to zoom
 </div><div class="row"><button class="btn" onclick="undo()">Undo</button>
 
 <button class="btn" onclick="redo()">Redo</button>
@@ -172,25 +226,19 @@ let dragging=false;
 let startX,startY;
 let startDist=0;
 
-/* LOAD FRAME */
-
 frame.src="frame.png";
 
 frame.onload=function(){
-
 draw();
-
 }
 
-/* CLICK CANVAS TO UPLOAD */
+/* CLICK BUTTON */
 
-canvas.addEventListener("click",function(){
-
+document.getElementById("uploadBtn").onclick=function(){
 document.getElementById("upload").click();
+}
 
-});
-
-/* UPLOAD */
+/* UPLOAD IMAGE */
 
 document.getElementById("upload").addEventListener("change",function(e){
 
@@ -205,6 +253,8 @@ img.onload=function(){
 scale=1;
 posX=0;
 posY=0;
+
+document.getElementById("uploadBtn").style.display="none";
 
 saveState();
 
@@ -236,20 +286,6 @@ ctx.drawImage(img,posX,posY,w,h);
 }
 
 ctx.drawImage(frame,0,0,canvas.width,canvas.height);
-
-/* TEXT OVERLAY */
-
-if(!img.src){
-
-ctx.fillStyle="rgba(0,0,0,0.6)";
-ctx.fillRect(0,350,800,100);
-
-ctx.fillStyle="white";
-ctx.font="bold 36px sans-serif";
-ctx.textAlign="center";
-ctx.fillText("Tap Here To Upload Photo",400,410);
-
-}
 
 }
 
