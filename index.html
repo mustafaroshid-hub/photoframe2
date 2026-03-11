@@ -1,21 +1,27 @@
 <!DOCTYPE html><html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Campaign Photo Generator</title><style>
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alhera Football Fest</title><style>
+
 body{
 margin:0;
 font-family:Arial;
-background:#e9eef3;
+background:#eef2f7;
 text-align:center;
 }
 
+/* Header */
+
 .header{
 background:white;
-padding:15px;
-font-size:20px;
-font-weight:bold;
+padding:12px;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
+
+.logo{
+height:50px;
+}
+
+/* Layout */
 
 .container{
 max-width:520px;
@@ -23,12 +29,16 @@ margin:auto;
 padding:20px;
 }
 
+/* Canvas */
+
 canvas{
 width:100%;
 border-radius:12px;
 background:white;
 box-shadow:0 6px 20px rgba(0,0,0,0.15);
 }
+
+/* Upload */
 
 .upload{
 border:2px dashed #999;
@@ -38,23 +48,25 @@ border-radius:10px;
 background:white;
 }
 
-.controls{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
-
-.controls button{
-flex:1;
-}
+/* Buttons */
 
 button{
 width:100%;
 padding:14px;
+margin-top:10px;
 border:none;
 border-radius:8px;
 font-size:16px;
 cursor:pointer;
+}
+
+.controls{
+display:flex;
+gap:10px;
+}
+
+.controls button{
+flex:1;
 }
 
 .undo{background:#ddd;}
@@ -87,11 +99,12 @@ font-size:14px;
 }
 
 </style></head><body><div class="header">
-📢 Campaign Photo Generator
+<img src="logo.png" class="logo">
 </div><div class="container"><canvas id="canvas" width="800" height="800"></canvas>
 
 <div class="upload">
-📷 Upload your photo<br><br>
+📷 Upload your photo
+<br><br>
 <input type="file" id="upload">
 </div><div class="controls">
 <button class="undo" onclick="undo()">Undo</button>
@@ -100,11 +113,11 @@ font-size:14px;
 
 <div class="counter">
 Total Downloads: <span id="count">0</span>
-</div><button class="download" onclick="download()">Download Image</button>
+</div><button class="download" onclick="download()">Download Photo</button>
 
-<button class="facebook" onclick="shareFB()">Share to Facebook</button>
+<button class="facebook" onclick="shareFB()">Share on Facebook</button>
 
-<button class="whatsapp" onclick="shareWA()">Share to WhatsApp</button>
+<button class="whatsapp" onclick="shareWA()">Share on WhatsApp</button>
 
 </div><script>
 
@@ -112,7 +125,7 @@ const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
 let frame=new Image();
-frame.src="20260312_005001.png";
+frame.src="frame.png";
 
 let img=new Image();
 
@@ -128,7 +141,10 @@ let startX,startY;
 let startDist=0;
 
 let downloads=localStorage.getItem("downloads")||0;
+
 document.getElementById("count").innerText=downloads;
+
+/* Upload photo */
 
 document.getElementById("upload").addEventListener("change",function(e){
 
@@ -157,6 +173,8 @@ reader.readAsDataURL(e.target.files[0]);
 
 });
 
+/* Draw */
+
 function draw(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -173,6 +191,8 @@ ctx.drawImage(img,posX,posY,w,h);
 ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
+
+/* Touch controls */
 
 canvas.addEventListener("touchstart",function(e){
 
@@ -227,6 +247,8 @@ saveState();
 
 });
 
+/* Distance */
+
 function getDistance(t1,t2){
 
 let dx=t1.clientX-t2.clientX;
@@ -235,6 +257,8 @@ let dy=t1.clientY-t2.clientY;
 return Math.sqrt(dx*dx+dy*dy);
 
 }
+
+/* History */
 
 function saveState(){
 
@@ -279,6 +303,8 @@ draw();
 
 }
 
+/* Auto center */
+
 function autoCenter(){
 
 scale=1;
@@ -290,11 +316,13 @@ saveState();
 
 }
 
+/* Download */
+
 function download(){
 
 let link=document.createElement("a");
 
-link.download="campaign-photo.png";
+link.download="alhera-photo.png";
 
 link.href=canvas.toDataURL();
 
@@ -308,6 +336,8 @@ document.getElementById("count").innerText=downloads;
 
 }
 
+/* Share */
+
 function shareFB(){
 
 window.open("https://www.facebook.com/sharer/sharer.php");
@@ -316,9 +346,8 @@ window.open("https://www.facebook.com/sharer/sharer.php");
 
 function shareWA(){
 
-window.open("https://wa.me/?text=Check%20out%20my%20campaign%20photo");
+window.open("https://wa.me/?text=Check%20out%20my%20Alhera%20Football%20Fest%20photo");
 
 }
 
-</script></body>
-</html>
+</script></body></html>
