@@ -3,9 +3,10 @@
 body{
 
 margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
-min-height:100vh;
+font-family:system-ui;
+background:#0f172a;
+color:white;
+text-align:center;
 
 }
 
@@ -13,48 +14,38 @@ min-height:100vh;
 
 .header{
 
-text-align:center;
-padding:25px;
+padding:30px 10px;
 
 }
 
 .logo{
 
-height:70px;
+height:65px;
+background:white;
+padding:8px;
+border-radius:12px;
 
 }
 
-/* MAIN CARD */
+/* MAIN */
 
 .container{
 
-max-width:520px;
+max-width:500px;
 margin:auto;
-
-background:#e5e7eb;
-
-padding:25px;
-
-border-radius:25px;
-
-box-shadow:
-
-20px 20px 40px #111827,
--10px -10px 20px #374151;
+padding:20px;
 
 }
 
-/* CANVAS */
+/* FRAME */
 
 canvas{
 
 width:100%;
-
-border-radius:18px;
-
+border-radius:20px;
 background:black;
 
-margin-top:10px;
+box-shadow:0 15px 40px rgba(0,0,0,0.6);
 
 }
 
@@ -64,18 +55,11 @@ margin-top:10px;
 
 margin-top:20px;
 
-padding:20px;
+background:#1e293b;
 
-border-radius:15px;
+padding:18px;
 
-background:#e5e7eb;
-
-box-shadow:
-
-inset 6px 6px 10px #cbd5e1,
-inset -6px -6px 10px white;
-
-text-align:center;
+border-radius:14px;
 
 }
 
@@ -85,45 +69,76 @@ text-align:center;
 
 width:100%;
 
-padding:15px;
+padding:14px;
 
-margin-top:15px;
+margin-top:12px;
 
 border:none;
 
-border-radius:30px;
+border-radius:40px;
 
-font-size:16px;
+font-size:15px;
+
+background:#2563eb;
+
+color:white;
 
 cursor:pointer;
-
-background:#e5e7eb;
-
-box-shadow:
-
-8px 8px 15px #cbd5e1,
--8px -8px 15px white;
 
 transition:0.2s;
 
 }
 
-.btn:active{
+.btn:hover{
 
-box-shadow:
+transform:scale(1.03);
 
-inset 6px 6px 10px #cbd5e1,
-inset -6px -6px 10px white;
+background:#1d4ed8;
 
 }
 
-/* ROW BUTTONS */
+/* BUTTON ROW */
 
 .row{
 
 display:flex;
-
 gap:10px;
+
+}
+
+/* FACEBOOK */
+
+.fb{
+
+margin-top:25px;
+
+background:#111827;
+
+padding:18px;
+
+border-radius:14px;
+
+font-size:14px;
+
+}
+
+.fb a{
+
+display:inline-block;
+
+margin-top:10px;
+
+background:#1877f2;
+
+color:white;
+
+padding:10px 18px;
+
+border-radius:30px;
+
+text-decoration:none;
+
+font-size:14px;
 
 }
 
@@ -141,23 +156,34 @@ gap:10px;
 
 <button class="btn" onclick="download()">Download Photo</button>
 
-</div><script>
+<div class="fb">Follow Alhera Football Fest on Facebook
+
+<br><a href="https://www.facebook.com/share/1E2pWE5mAb/" target="_blank">Follow Page
+
+</a></div></div><script>
 
 const canvas=document.getElementById("canvas");
+
 const ctx=canvas.getContext("2d");
 
 let frame=new Image();
+
 let img=new Image();
 
 let scale=1;
+
 let posX=0;
+
 let posY=0;
 
 let history=[];
+
 let redoStack=[];
 
 let dragging=false;
+
 let startX,startY;
+
 let startDist=0;
 
 /* PRELOAD FRAME */
@@ -222,7 +248,7 @@ ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
 
-/* TOUCH START */
+/* TOUCH */
 
 canvas.addEventListener("touchstart",function(e){
 
@@ -243,8 +269,6 @@ startDist=getDistance(e.touches[0],e.touches[1]);
 }
 
 });
-
-/* TOUCH MOVE */
 
 canvas.addEventListener("touchmove",function(e){
 
@@ -273,8 +297,6 @@ draw();
 }
 
 });
-
-/* TOUCH END */
 
 canvas.addEventListener("touchend",function(){
 
@@ -315,7 +337,9 @@ redoStack.push(history.pop());
 let last=history[history.length-1];
 
 scale=last.scale;
+
 posX=last.posX;
+
 posY=last.posY;
 
 draw();
@@ -331,7 +355,9 @@ if(redoStack.length>0){
 let state=redoStack.pop();
 
 scale=state.scale;
+
 posX=state.posX;
+
 posY=state.posY;
 
 history.push(state);
