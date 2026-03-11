@@ -1,53 +1,155 @@
 <!DOCTYPE html><html>
 <head>
-<title>Photo Frame Generator</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campaign Photo Generator</title><style>
 body{
-font-family: Arial;
+margin:0;
+font-family:Arial;
+background:#e9eef3;
 text-align:center;
-background:#f5f5f5;
+}
+
+.header{
+background:white;
+padding:15px;
+font-size:20px;
+font-weight:bold;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.container{
+max-width:520px;
+margin:auto;
+padding:20px;
 }
 
 canvas{
-border:1px solid #ccc;
-margin-top:20px;
+width:100%;
+border-radius:12px;
+background:white;
+box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+.upload{
+border:2px dashed #999;
+padding:18px;
+margin-top:15px;
+border-radius:10px;
+background:white;
+}
+
+.controls{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.controls button{
+flex:1;
 }
 
 button{
-margin-top:15px;
-padding:10px 20px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
 font-size:16px;
+cursor:pointer;
 }
-</style></head><body><h2>Upload your photo</h2><input type="file" id="upload"><br><canvas id="canvas" width="800" height="800"></canvas>
 
-<br><button onclick="download()">Download</button>
+.undo{background:#ddd;}
+.redo{background:#ddd;}
 
-<script>
+.center{
+background:#444;
+color:white;
+}
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+.download{
+background:#18a34a;
+color:white;
+}
 
-const frame = new Image();
-frame.src = "20260312_005001.png";
+.facebook{
+background:#1877f2;
+color:white;
+}
 
-let userImage = null;
+.whatsapp{
+background:#25d366;
+color:white;
+}
 
-frame.onload = function(){
+.counter{
+margin-top:10px;
+color:#555;
+font-size:14px;
+}
+
+</style></head><body><div class="header">
+📢 Campaign Photo Generator
+</div><div class="container"><canvas id="canvas" width="800" height="800"></canvas>
+
+<div class="upload">
+📷 Upload your photo<br><br>
+<input type="file" id="upload">
+</div><div class="controls">
+<button class="undo" onclick="undo()">Undo</button>
+<button class="redo" onclick="redo()">Redo</button>
+</div><button class="center" onclick="autoCenter()">Auto Center</button>
+
+<div class="counter">
+Total Downloads: <span id="count">0</span>
+</div><button class="download" onclick="download()">Download Image</button>
+
+<button class="facebook" onclick="shareFB()">Share to Facebook</button>
+
+<button class="whatsapp" onclick="shareWA()">Share to WhatsApp</button>
+
+</div><script>
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+let frame=new Image();
+frame.src="20260312_005001.png";
+
+let img=new Image();
+
+let scale=1;
+let posX=0;
+let posY=0;
+
+let history=[];
+let redoStack=[];
+
+let dragging=false;
+let startX,startY;
+let startDist=0;
+
+let downloads=localStorage.getItem("downloads")||0;
+document.getElementById("count").innerText=downloads;
+
+document.getElementById("upload").addEventListener("change",function(e){
+
+const reader=new FileReader();
+
+reader.onload=function(event){
+
+img=new Image();
+
+img.onload=function(){
+
+scale=1;
+posX=0;
+posY=0;
+
+saveState();
 draw();
+
 }
 
-document.getElementById("upload").addEventListener("change", function(e){
-
-const reader = new FileReader();
-
-reader.onload = function(event){
-
-userImage = new Image();
-
-userImage.onload = function(){
-draw();
-}
-
-userImage.src = event.target.result;
+img.src=event.target.result;
 
 }
 
@@ -59,20 +161,162 @@ function draw(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
-if(userImage){
-ctx.drawImage(userImage,0,0,canvas.width,canvas.height);
+if(img.src){
+
+let w=canvas.width*scale;
+let h=canvas.height*scale;
+
+ctx.drawImage(img,posX,posY,w,h);
+
 }
 
 ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
 
+canvas.addEventListener("touchstart",function(e){
+
+if(e.touches.length==1){
+
+dragging=true;
+
+startX=e.touches[0].clientX-posX;
+startY=e.touches[0].clientY-posY;
+
+}
+
+if(e.touches.length==2){
+
+startDist=getDistance(e.touches[0],e.touches[1]);
+
+}
+
+});
+
+canvas.addEventListener("touchmove",function(e){
+
+e.preventDefault();
+
+if(e.touches.length==1 && dragging){
+
+posX=e.touches[0].clientX-startX;
+posY=e.touches[0].clientY-startY;
+
+draw();
+
+}
+
+if(e.touches.length==2){
+
+let newDist=getDistance(e.touches[0],e.touches[1]);
+
+scale*=newDist/startDist;
+
+startDist=newDist;
+
+draw();
+
+}
+
+});
+
+canvas.addEventListener("touchend",function(){
+
+dragging=false;
+saveState();
+
+});
+
+function getDistance(t1,t2){
+
+let dx=t1.clientX-t2.clientX;
+let dy=t1.clientY-t2.clientY;
+
+return Math.sqrt(dx*dx+dy*dy);
+
+}
+
+function saveState(){
+
+history.push({scale,posX,posY});
+redoStack=[];
+
+}
+
+function undo(){
+
+if(history.length>1){
+
+redoStack.push(history.pop());
+
+let last=history[history.length-1];
+
+scale=last.scale;
+posX=last.posX;
+posY=last.posY;
+
+draw();
+
+}
+
+}
+
+function redo(){
+
+if(redoStack.length>0){
+
+let state=redoStack.pop();
+
+scale=state.scale;
+posX=state.posX;
+posY=state.posY;
+
+history.push(state);
+
+draw();
+
+}
+
+}
+
+function autoCenter(){
+
+scale=1;
+posX=0;
+posY=0;
+
+draw();
+saveState();
+
+}
+
 function download(){
 
-const link=document.createElement("a");
-link.download="framed-photo.png";
+let link=document.createElement("a");
+
+link.download="campaign-photo.png";
+
 link.href=canvas.toDataURL();
+
 link.click();
+
+downloads++;
+
+localStorage.setItem("downloads",downloads);
+
+document.getElementById("count").innerText=downloads;
+
+}
+
+function shareFB(){
+
+window.open("https://www.facebook.com/sharer/sharer.php");
+
+}
+
+function shareWA(){
+
+window.open("https://wa.me/?text=Check%20out%20my%20campaign%20photo");
 
 }
 
