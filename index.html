@@ -1,58 +1,85 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alhera Football Fest</title><style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alhera Football Fest</title><style>
 
 body{
+
 margin:0;
 font-family:Arial;
-background:linear-gradient(135deg,#020617,#0f172a,#1e1b4b);
+background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
 min-height:100vh;
-color:white;
-text-align:center;
+
 }
 
-/* header */
+/* HEADER */
 
 .header{
-padding:20px;
+
+text-align:center;
+padding:25px;
+
 }
 
 .logo{
-height:60px;
+
+height:70px;
+
 }
 
-/* container */
+/* MAIN CARD */
 
 .container{
+
 max-width:520px;
 margin:auto;
-padding:20px;
+
+background:#e5e7eb;
+
+padding:25px;
+
+border-radius:25px;
+
+box-shadow:
+
+20px 20px 40px #111827,
+-10px -10px 20px #374151;
+
 }
 
-/* canvas */
+/* CANVAS */
 
 canvas{
+
 width:100%;
-border-radius:20px;
+
+border-radius:18px;
+
 background:black;
-box-shadow:
-0 0 40px rgba(80,100,255,0.4);
+
+margin-top:10px;
+
 }
 
-/* upload box */
+/* UPLOAD */
 
 .upload{
 
 margin-top:20px;
 
-border:2px dashed rgba(255,255,255,0.3);
-
 padding:20px;
 
 border-radius:15px;
 
+background:#e5e7eb;
+
+box-shadow:
+
+inset 6px 6px 10px #cbd5e1,
+inset -6px -6px 10px white;
+
+text-align:center;
+
 }
 
-/* button style */
+/* BUTTONS */
 
 .btn{
 
@@ -60,45 +87,37 @@ width:100%;
 
 padding:15px;
 
-margin-top:12px;
+margin-top:15px;
 
 border:none;
 
-border-radius:18px;
+border-radius:30px;
 
 font-size:16px;
 
-color:white;
-
 cursor:pointer;
 
-background:rgba(255,255,255,0.08);
-
-backdrop-filter:blur(12px);
+background:#e5e7eb;
 
 box-shadow:
 
-0 0 15px rgba(120,120,255,0.4),
+8px 8px 15px #cbd5e1,
+-8px -8px 15px white;
 
-inset 0 0 10px rgba(255,255,255,0.1);
-
-transition:0.3s;
+transition:0.2s;
 
 }
 
-.btn:hover{
-
-transform:scale(1.05);
+.btn:active{
 
 box-shadow:
 
-0 0 25px rgba(120,120,255,0.9),
-
-inset 0 0 12px rgba(255,255,255,0.2);
+inset 6px 6px 10px #cbd5e1,
+inset -6px -6px 10px white;
 
 }
 
-/* row buttons */
+/* ROW BUTTONS */
 
 .row{
 
@@ -120,7 +139,7 @@ gap:10px;
 
 </div><button class="btn" onclick="centerImage()">Auto Center</button>
 
-<button class="btn" onclick="download()">Download</button>
+<button class="btn" onclick="download()">Download Photo</button>
 
 </div><script>
 
@@ -141,7 +160,7 @@ let dragging=false;
 let startX,startY;
 let startDist=0;
 
-/* preload frame */
+/* PRELOAD FRAME */
 
 frame.src="frame.png";
 
@@ -151,7 +170,7 @@ draw();
 
 }
 
-/* upload photo */
+/* UPLOAD */
 
 document.getElementById("upload").addEventListener("change",function(e){
 
@@ -164,7 +183,9 @@ img=new Image();
 img.onload=function(){
 
 scale=1;
+
 posX=0;
+
 posY=0;
 
 saveState();
@@ -181,7 +202,7 @@ reader.readAsDataURL(e.target.files[0]);
 
 });
 
-/* draw */
+/* DRAW */
 
 function draw(){
 
@@ -190,6 +211,7 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 if(img.src){
 
 let w=canvas.width*scale;
+
 let h=canvas.height*scale;
 
 ctx.drawImage(img,posX,posY,w,h);
@@ -200,7 +222,7 @@ ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
 
-/* touch start */
+/* TOUCH START */
 
 canvas.addEventListener("touchstart",function(e){
 
@@ -209,6 +231,7 @@ if(e.touches.length==1){
 dragging=true;
 
 startX=e.touches[0].clientX-posX;
+
 startY=e.touches[0].clientY-posY;
 
 }
@@ -221,7 +244,7 @@ startDist=getDistance(e.touches[0],e.touches[1]);
 
 });
 
-/* touch move */
+/* TOUCH MOVE */
 
 canvas.addEventListener("touchmove",function(e){
 
@@ -230,6 +253,7 @@ e.preventDefault();
 if(e.touches.length==1 && dragging){
 
 posX=e.touches[0].clientX-startX;
+
 posY=e.touches[0].clientY-startY;
 
 draw();
@@ -250,7 +274,7 @@ draw();
 
 });
 
-/* touch end */
+/* TOUCH END */
 
 canvas.addEventListener("touchend",function(){
 
@@ -260,18 +284,19 @@ saveState();
 
 });
 
-/* distance */
+/* DISTANCE */
 
 function getDistance(t1,t2){
 
 let dx=t1.clientX-t2.clientX;
+
 let dy=t1.clientY-t2.clientY;
 
 return Math.sqrt(dx*dx+dy*dy);
 
 }
 
-/* history */
+/* HISTORY */
 
 function saveState(){
 
@@ -317,19 +342,21 @@ draw();
 
 }
 
-/* center */
+/* CENTER */
 
 function centerImage(){
 
 scale=1;
+
 posX=0;
+
 posY=0;
 
 draw();
 
 }
 
-/* download */
+/* DOWNLOAD */
 
 function download(){
 
