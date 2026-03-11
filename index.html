@@ -1,25 +1,20 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alhera Football Fest</title><style>
-
+<title>Campaign Photo Generator</title><style>
 body{
 margin:0;
 font-family:Arial;
+background:#e9eef3;
 text-align:center;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-overflow-x:hidden;
 }
 
 .header{
 background:white;
 padding:15px;
-box-shadow:0 4px 15px rgba(0,0,0,0.3);
-}
-
-.header img{
-max-width:240px;
+font-size:20px;
+font-weight:bold;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .container{
@@ -30,10 +25,17 @@ padding:20px;
 
 canvas{
 width:100%;
-border-radius:14px;
+border-radius:12px;
 background:white;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
-cursor:pointer;
+box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+.upload{
+border:2px dashed #999;
+padding:18px;
+margin-top:15px;
+border-radius:10px;
+background:white;
 }
 
 .controls{
@@ -50,78 +52,67 @@ button{
 width:100%;
 padding:14px;
 border:none;
-border-radius:10px;
+border-radius:8px;
 font-size:16px;
 cursor:pointer;
-margin-top:10px;
 }
 
-.undo{background:#e0e0e0;}
-.redo{background:#e0e0e0;}
+.undo{background:#ddd;}
+.redo{background:#ddd;}
 
 .center{
-background:#333;
+background:#444;
 color:white;
 }
 
 .download{
-background:#00c853;
+background:#18a34a;
 color:white;
-font-weight:bold;
+}
+
+.facebook{
+background:#1877f2;
+color:white;
+}
+
+.whatsapp{
+background:#25d366;
+color:white;
 }
 
 .counter{
 margin-top:10px;
-color:#ddd;
+color:#555;
 font-size:14px;
 }
 
-.footer{
-margin-top:25px;
-font-size:13px;
-opacity:0.7;
-}
-
-.lights{
-position:fixed;
-top:-200px;
-left:-200px;
-width:150%;
-height:150%;
-background:radial-gradient(circle,#ffffff22 0%,transparent 60%);
-animation:moveLights 8s linear infinite;
-pointer-events:none;
-}
-
-@keyframes moveLights{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
-}
-
-</style></head><body><div class="lights"></div><div class="header">
-<img src="logo.png">
+</style></head><body><div class="header">
+📢 Campaign Photo Generator
 </div><div class="container"><canvas id="canvas" width="800" height="800"></canvas>
 
-<input type="file" id="upload" hidden><div class="controls">
+<div class="upload">
+📷 Upload your photo<br><br>
+<input type="file" id="upload">
+</div><div class="controls">
 <button class="undo" onclick="undo()">Undo</button>
 <button class="redo" onclick="redo()">Redo</button>
 </div><button class="center" onclick="autoCenter()">Auto Center</button>
 
 <div class="counter">
 Total Downloads: <span id="count">0</span>
-</div><button class="download" onclick="download()">⬇ Download Photo</button>
+</div><button class="download" onclick="download()">Download Image</button>
 
-<div class="footer">
-Tap the frame to upload your photo
-<br>
-Alhera Football Fest © 2026
-</div></div><script>
+<button class="facebook" onclick="shareFB()">Share to Facebook</button>
+
+<button class="whatsapp" onclick="shareWA()">Share to WhatsApp</button>
+
+</div><script>
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
 let frame=new Image();
-frame.src="frame.png";
+frame.src="20260312_005001.png";
 
 let img=new Image();
 
@@ -138,8 +129,6 @@ let startDist=0;
 
 let downloads=localStorage.getItem("downloads")||0;
 document.getElementById("count").innerText=downloads;
-
-canvas.onclick=()=>document.getElementById("upload").click();
 
 document.getElementById("upload").addEventListener("change",function(e){
 
@@ -305,7 +294,7 @@ function download(){
 
 let link=document.createElement("a");
 
-link.download="alhera-football-fest.png";
+link.download="campaign-photo.png";
 
 link.href=canvas.toDataURL();
 
@@ -316,6 +305,18 @@ downloads++;
 localStorage.setItem("downloads",downloads);
 
 document.getElementById("count").innerText=downloads;
+
+}
+
+function shareFB(){
+
+window.open("https://www.facebook.com/sharer/sharer.php");
+
+}
+
+function shareWA(){
+
+window.open("https://wa.me/?text=Check%20out%20my%20campaign%20photo");
 
 }
 
