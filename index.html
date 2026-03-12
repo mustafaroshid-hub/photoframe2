@@ -1,9 +1,10 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alhera Football Fest</title><style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alhera Football Fest</title><style>
 
 body{
 margin:0;
 font-family:system-ui;
-background:#e9e9e9;
+background:#ececec;
 text-align:center;
 color:#111;
 }
@@ -17,11 +18,9 @@ padding:30px 10px;
 .logo{
 height:70px;
 padding:15px;
-background:#e9e9e9;
+background:#ececec;
 border-radius:18px;
-box-shadow:
-8px 8px 16px #cfcfcf,
--8px -8px 16px #ffffff;
+box-shadow:8px 8px 16px #cfcfcf,-8px -8px 16px #ffffff;
 }
 
 /* MAIN */
@@ -32,63 +31,52 @@ margin:auto;
 padding:20px;
 }
 
-/* FRAME AREA */
+/* FRAME CARD */
 
 .frame-area{
 position:relative;
+padding:15px;
+border-radius:22px;
+background:#ececec;
+box-shadow:8px 8px 16px #cfcfcf,-8px -8px 16px #ffffff;
 }
 
 /* CANVAS */
 
 canvas{
 width:100%;
-border-radius:25px;
-margin-top:15px;
+border-radius:18px;
 }
 
 /* UPLOAD BUTTON */
 
 .upload-btn{
-
 position:absolute;
-
 top:50%;
 left:50%;
-
 transform:translate(-50%,-50%);
-
 background:#111;
-
 color:white;
-
-padding:16px 26px;
-
+padding:15px 26px;
 border-radius:40px;
-
-font-size:16px;
-
+font-size:15px;
 cursor:pointer;
-
 box-shadow:0 10px 25px rgba(0,0,0,0.35);
-
 animation:pulse 2s infinite;
-
 }
 
 /* ANIMATION */
 
 @keyframes pulse{
-
 0%{transform:translate(-50%,-50%) scale(1);}
 50%{transform:translate(-50%,-50%) scale(1.08);}
 100%{transform:translate(-50%,-50%) scale(1);}
-
 }
 
 /* INSTRUCTION */
 
 .instruction{
-margin-top:10px;
+margin-top:12px;
 font-size:14px;
 opacity:0.7;
 }
@@ -112,19 +100,17 @@ font-size:15px;
 background:#111;
 color:white;
 cursor:pointer;
-
-box-shadow:
-4px 4px 10px rgba(0,0,0,0.3),
--2px -2px 5px rgba(255,255,255,0.2);
-
+box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 transition:0.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
 }
 
 .btn:active{
 transform:scale(0.96);
-box-shadow:
-inset 4px 4px 10px rgba(0,0,0,0.5),
-inset -2px -2px 5px rgba(255,255,255,0.1);
+box-shadow:inset 4px 4px 10px rgba(0,0,0,0.6);
 }
 
 .bigbtn{
@@ -132,106 +118,26 @@ width:100%;
 margin-top:15px;
 }
 
-/* FACEBOOK SECTION */
+/* FACEBOOK CARD */
 
 .fb{
-
 margin-top:30px;
-
 padding:20px;
-
 border-radius:20px;
-
-background:#e9e9e9;
-
-box-shadow:
-8px 8px 16px #cfcfcf,
--8px -8px 16px #ffffff;
-
+background:#ececec;
+box-shadow:8px 8px 16px #cfcfcf,-8px -8px 16px #ffffff;
 font-size:14px;
-
 }
 
 .fb a{
-
 display:inline-block;
-
 margin-top:10px;
-
 background:#111;
-
 color:white;
-
 padding:10px 20px;
-
 border-radius:30px;
-
 text-decoration:none;
-
 box-shadow:4px 4px 10px rgba(0,0,0,0.3);
-
-}
-
-/* POPUP */
-
-.popup{
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:rgba(0,0,0,0.6);
-
-display:none;
-
-align-items:center;
-justify-content:center;
-
-}
-
-.popup-content{
-
-background:white;
-
-padding:30px;
-
-border-radius:20px;
-
-max-width:300px;
-
-text-align:center;
-
-}
-
-.popup-content a{
-
-display:inline-block;
-
-margin-top:15px;
-
-background:#111;
-
-color:white;
-
-padding:10px 20px;
-
-border-radius:30px;
-
-text-decoration:none;
-
-}
-
-.close{
-
-margin-top:10px;
-display:block;
-cursor:pointer;
-opacity:0.6;
-
 }
 
 </style></head><body><div class="header">
@@ -251,21 +157,17 @@ Drag to move • Pinch to zoom
 
 <button class="btn bigbtn" onclick="shareFB()">Share to Facebook</button>
 
-<div class="fb">Follow Alhera Football Fest on Facebook
+<div class="fb">Follow Alhera Football Fest
 
 <br><a href="https://www.facebook.com/share/1H2QzZFddg/" target="_blank">
 ⚽ Follow Page
 </a><br><br>
 
-Join the Alhera Football Fest Community
+Join the Community
 
 <br><a href="https://www.facebook.com/groups/1442196430549574/?ref=share&mibextid=NSMWBT" target="_blank">
 👥 Join Facebook Group
-</a></div></div><input type="file" id="upload" style="display:none"><div class="popup" id="popup"><div class="popup-content"><h3>⚽ Share your photo!</h3><p>Post your photo in our Facebook group and show your support for Alhera Football Fest.</p><a href="https://www.facebook.com/groups/1442196430549574/?ref=share&mibextid=NSMWBT" target="_blank">
-Join & Share
-</a><span class="close" onclick="closePopup()">Close</span>
-
-</div></div><script>
+</a></div></div><input type="file" id="upload" style="display:none"><script>
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
@@ -283,6 +185,8 @@ let redoStack=[];
 let dragging=false;
 let startX,startY;
 let startDist=0;
+
+/* LOAD FRAME */
 
 frame.src="frame.png";
 
@@ -346,7 +250,7 @@ ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
 
-/* TOUCH */
+/* TOUCH START */
 
 canvas.addEventListener("touchstart",function(e){
 
@@ -366,6 +270,8 @@ startDist=getDistance(e.touches[0],e.touches[1]);
 }
 
 });
+
+/* TOUCH MOVE */
 
 canvas.addEventListener("touchmove",function(e){
 
@@ -393,6 +299,8 @@ draw();
 
 });
 
+/* TOUCH END */
+
 canvas.addEventListener("touchend",function(){
 
 dragging=false;
@@ -414,10 +322,8 @@ return Math.sqrt(dx*dx+dy*dy);
 /* HISTORY */
 
 function saveState(){
-
 history.push({scale,posX,posY});
 redoStack=[];
-
 }
 
 function undo(){
@@ -479,16 +385,6 @@ link.download="alhera-football-fest.png";
 link.href=canvas.toDataURL();
 
 link.click();
-
-document.getElementById("popup").style.display="flex";
-
-}
-
-/* POPUP */
-
-function closePopup(){
-
-document.getElementById("popup").style.display="none";
 
 }
 
