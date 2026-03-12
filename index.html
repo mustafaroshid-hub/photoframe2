@@ -46,7 +46,7 @@ border-radius:25px;
 margin-top:15px;
 }
 
-/* UPLOAD BUTTON ON IMAGE */
+/* UPLOAD BUTTON */
 
 .upload-btn{
 
@@ -75,32 +75,22 @@ animation:pulse 2s infinite;
 
 }
 
-/* PULSE ANIMATION */
+/* ANIMATION */
 
 @keyframes pulse{
 
-0%{
-transform:translate(-50%,-50%) scale(1);
-}
-
-50%{
-transform:translate(-50%,-50%) scale(1.08);
-}
-
-100%{
-transform:translate(-50%,-50%) scale(1);
-}
+0%{transform:translate(-50%,-50%) scale(1);}
+50%{transform:translate(-50%,-50%) scale(1.08);}
+100%{transform:translate(-50%,-50%) scale(1);}
 
 }
 
 /* INSTRUCTION */
 
 .instruction{
-
 margin-top:10px;
 font-size:14px;
 opacity:0.7;
-
 }
 
 /* BUTTON ROW */
@@ -131,13 +121,10 @@ transition:0.2s;
 }
 
 .btn:active{
-
 transform:scale(0.96);
-
 box-shadow:
 inset 4px 4px 10px rgba(0,0,0,0.5),
 inset -2px -2px 5px rgba(255,255,255,0.1);
-
 }
 
 .bigbtn{
@@ -145,7 +132,7 @@ width:100%;
 margin-top:15px;
 }
 
-/* FACEBOOK */
+/* FACEBOOK SECTION */
 
 .fb{
 
@@ -185,6 +172,68 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 
 }
 
+/* POPUP */
+
+.popup{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.6);
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+}
+
+.popup-content{
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+max-width:300px;
+
+text-align:center;
+
+}
+
+.popup-content a{
+
+display:inline-block;
+
+margin-top:15px;
+
+background:#111;
+
+color:white;
+
+padding:10px 20px;
+
+border-radius:30px;
+
+text-decoration:none;
+
+}
+
+.close{
+
+margin-top:10px;
+display:block;
+cursor:pointer;
+opacity:0.6;
+
+}
+
 </style></head><body><div class="header">
 <img src="logo.png" class="logo">
 </div><div class="container"><div class="frame-area"><canvas id="canvas" width="800" height="800"></canvas>
@@ -194,7 +243,6 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 </div></div><div class="instruction">
 Drag to move • Pinch to zoom
 </div><div class="row"><button class="btn" onclick="undo()">Undo</button>
-
 <button class="btn" onclick="redo()">Redo</button>
 
 </div><button class="btn bigbtn" onclick="centerImage()">Auto Center</button>
@@ -205,9 +253,19 @@ Drag to move • Pinch to zoom
 
 <div class="fb">Follow Alhera Football Fest on Facebook
 
-<br><a href="https://www.facebook.com/share/1H2QzZFddg/" target="_blank">Follow Page
+<br><a href="https://www.facebook.com/share/1H2QzZFddg/" target="_blank">
+⚽ Follow Page
+</a><br><br>
 
-</a></div></div><input type="file" id="upload" style="display:none"><script>
+Join the Alhera Football Fest Community
+
+<br><a href="https://www.facebook.com/groups/1442196430549574/?ref=share&mibextid=NSMWBT" target="_blank">
+👥 Join Facebook Group
+</a></div></div><input type="file" id="upload" style="display:none"><div class="popup" id="popup"><div class="popup-content"><h3>⚽ Share your photo!</h3><p>Post your photo in our Facebook group and show your support for Alhera Football Fest.</p><a href="https://www.facebook.com/groups/1442196430549574/?ref=share&mibextid=NSMWBT" target="_blank">
+Join & Share
+</a><span class="close" onclick="closePopup()">Close</span>
+
+</div></div><script>
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
@@ -232,7 +290,7 @@ frame.onload=function(){
 draw();
 }
 
-/* CLICK BUTTON */
+/* UPLOAD BUTTON */
 
 document.getElementById("uploadBtn").onclick=function(){
 document.getElementById("upload").click();
@@ -257,7 +315,6 @@ posY=0;
 document.getElementById("uploadBtn").style.display="none";
 
 saveState();
-
 draw();
 
 }
@@ -289,7 +346,7 @@ ctx.drawImage(frame,0,0,canvas.width,canvas.height);
 
 }
 
-/* TOUCH START */
+/* TOUCH */
 
 canvas.addEventListener("touchstart",function(e){
 
@@ -310,8 +367,6 @@ startDist=getDistance(e.touches[0],e.touches[1]);
 
 });
 
-/* TOUCH MOVE */
-
 canvas.addEventListener("touchmove",function(e){
 
 e.preventDefault();
@@ -330,7 +385,6 @@ if(e.touches.length==2){
 let newDist=getDistance(e.touches[0],e.touches[1]);
 
 scale*=newDist/startDist;
-
 startDist=newDist;
 
 draw();
@@ -339,12 +393,9 @@ draw();
 
 });
 
-/* TOUCH END */
-
 canvas.addEventListener("touchend",function(){
 
 dragging=false;
-
 saveState();
 
 });
@@ -369,8 +420,6 @@ redoStack=[];
 
 }
 
-/* UNDO */
-
 function undo(){
 
 if(history.length>1){
@@ -388,8 +437,6 @@ draw();
 }
 
 }
-
-/* REDO */
 
 function redo(){
 
@@ -433,6 +480,16 @@ link.href=canvas.toDataURL();
 
 link.click();
 
+document.getElementById("popup").style.display="flex";
+
+}
+
+/* POPUP */
+
+function closePopup(){
+
+document.getElementById("popup").style.display="none";
+
 }
 
 /* SHARE */
@@ -444,4 +501,3 @@ window.open("https://www.facebook.com/sharer/sharer.php?u="+window.location.href
 }
 
 </script></body></html>
-
