@@ -9,8 +9,6 @@ text-align:center;
 color:#111;
 }
 
-/* HEADER */
-
 .header{
 padding:30px 10px;
 }
@@ -23,15 +21,11 @@ border-radius:18px;
 box-shadow:8px 8px 16px #cfcfcf,-8px -8px 16px #ffffff;
 }
 
-/* MAIN */
-
 .container{
 max-width:500px;
 margin:auto;
 padding:20px;
 }
-
-/* FRAME CARD */
 
 .frame-area{
 position:relative;
@@ -41,14 +35,10 @@ background:#ececec;
 box-shadow:8px 8px 16px #cfcfcf,-8px -8px 16px #ffffff;
 }
 
-/* CANVAS */
-
 canvas{
 width:100%;
 border-radius:18px;
 }
-
-/* UPLOAD BUTTON */
 
 .upload-btn{
 position:absolute;
@@ -65,15 +55,11 @@ box-shadow:0 10px 25px rgba(0,0,0,0.35);
 animation:pulse 2s infinite;
 }
 
-/* ANIMATION */
-
 @keyframes pulse{
 0%{transform:translate(-50%,-50%) scale(1);}
 50%{transform:translate(-50%,-50%) scale(1.08);}
 100%{transform:translate(-50%,-50%) scale(1);}
 }
-
-/* INSTRUCTION */
 
 .instruction{
 margin-top:12px;
@@ -81,15 +67,11 @@ font-size:14px;
 opacity:0.7;
 }
 
-/* BUTTON ROW */
-
 .row{
 display:flex;
 gap:12px;
 margin-top:15px;
 }
-
-/* BUTTON */
 
 .btn{
 flex:1;
@@ -117,8 +99,6 @@ box-shadow:inset 4px 4px 10px rgba(0,0,0,0.6);
 width:100%;
 margin-top:15px;
 }
-
-/* FACEBOOK CARD */
 
 .fb{
 margin-top:30px;
@@ -148,14 +128,11 @@ box-shadow:4px 4px 10px rgba(0,0,0,0.3);
 ⬆ Upload your image
 </div></div><div class="instruction">
 Drag to move • Pinch to zoom
-</div><div class="row"><button class="btn" onclick="undo()">Undo</button>
+</div><div class="row">
+<button class="btn" onclick="undo()">Undo</button>
 <button class="btn" onclick="redo()">Redo</button>
-
 </div><button class="btn bigbtn" onclick="centerImage()">Auto Center</button>
-
 <button class="btn bigbtn" onclick="download()">Download Photo</button>
-
-<button class="btn bigbtn" onclick="shareFB()">Share to Facebook</button>
 
 <div class="fb">Follow Alhera Football Fest
 
@@ -186,17 +163,19 @@ let dragging=false;
 let startX,startY;
 let startDist=0;
 
-/* LOAD FRAME */
-
 frame.src="frame.png";
 
 frame.onload=function(){
 draw();
 }
 
-/* UPLOAD BUTTON */
+/* TAP FRAME TO UPLOAD */
 
 document.getElementById("uploadBtn").onclick=function(){
+document.getElementById("upload").click();
+}
+
+canvas.onclick=function(){
 document.getElementById("upload").click();
 }
 
@@ -212,9 +191,7 @@ img=new Image();
 
 img.onload=function(){
 
-scale=1;
-posX=0;
-posY=0;
+autoFit();
 
 document.getElementById("uploadBtn").style.display="none";
 
@@ -231,6 +208,29 @@ reader.readAsDataURL(e.target.files[0]);
 
 });
 
+/* AUTO FIT */
+
+function autoFit(){
+
+let imgRatio = img.width / img.height;
+let canvasRatio = canvas.width / canvas.height;
+
+if(imgRatio > canvasRatio){
+
+scale = canvas.height / img.height;
+}else{
+
+scale = canvas.width / img.width;
+}
+
+let w = img.width * scale;
+let h = img.height * scale;
+
+posX = (canvas.width - w) / 2;
+posY = (canvas.height - h) / 2;
+
+}
+
 /* DRAW */
 
 function draw(){
@@ -239,8 +239,8 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 
 if(img.src){
 
-let w=canvas.width*scale;
-let h=canvas.height*scale;
+let w=img.width*scale;
+let h=img.height*scale;
 
 ctx.drawImage(img,posX,posY,w,h);
 
@@ -308,8 +308,6 @@ saveState();
 
 });
 
-/* DISTANCE */
-
 function getDistance(t1,t2){
 
 let dx=t1.clientX-t2.clientX;
@@ -365,13 +363,8 @@ draw();
 /* CENTER */
 
 function centerImage(){
-
-scale=1;
-posX=0;
-posY=0;
-
+autoFit();
 draw();
-
 }
 
 /* DOWNLOAD */
@@ -385,14 +378,6 @@ link.download="alhera-football-fest.png";
 link.href=canvas.toDataURL();
 
 link.click();
-
-}
-
-/* SHARE */
-
-function shareFB(){
-
-window.open("https://www.facebook.com/sharer/sharer.php?u="+window.location.href);
 
 }
 
